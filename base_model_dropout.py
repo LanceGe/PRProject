@@ -3,7 +3,7 @@ import tensorflow as tf
 tf.logging.set_verbosity(tf.logging.INFO)
 
 
-def BN_model_fn(features, labels, mode):
+def base_model_fn(features, labels, mode):
     """ Adapted from
         https://www.tensorflow.org/tutorials/layers#building_the_cnn_mnist_classifier.
     """
@@ -17,13 +17,8 @@ def BN_model_fn(features, labels, mode):
         activation=None
     )
 
-    bn1 = tf.layers.batch_normalization(
-        inputs=conv1,
-        training=(mode == tf.estimator.ModeKeys.TRAIN)
-    )
-
     pool1 = tf.layers.max_pooling2d(
-        inputs=bn1,
+        inputs=conv1,
         pool_size=[2, 2],
         strides=2
     )
@@ -36,13 +31,8 @@ def BN_model_fn(features, labels, mode):
         activation=None
     )
 
-    bn2 = tf.layers.batch_normalization(
-        inputs=conv2,
-        training=(mode == tf.estimator.ModeKeys.TRAIN)
-    )
-
     pool2 = tf.layers.max_pooling2d(
-        inputs=bn2,
+        inputs=conv2,
         pool_size=[2, 2],
         strides=2
     )
@@ -52,24 +42,22 @@ def BN_model_fn(features, labels, mode):
         inputs=pool2,
         filters=500,
         kernel_size=[4, 4],
-        activation=None
+        activation=tf.nn.relu
     )
-
-    bn3 = tf.layers.batch_normalization(
-        inputs=conv3,
-        training=(mode == tf.estimator.ModeKeys.TRAIN)
-    )
-
-    relu1 = tf.nn.relu(bn3)
 
     # The fourth block
     conv4 = tf.layers.conv2d(
-        inputs=relu1,
+        inputs=conv3,
         filters=10,
         kernel_size=[1, 1]
     )
 
-    logits = tf.reshape(conv4, [-1, 10])
+    dropout1 = tf.layers.dropout(
+        inputs=conv4,
+        training=(mode == tf.estimator.ModeKeys.TRAIN)
+    )
+
+    logits = tf.reshape(dropout1, [-1, 10])
 
     predictions = {
         "classes": tf.argmax(input=logits, axis=1),
@@ -94,7 +82,7 @@ def BN_model_fn(features, labels, mode):
 
     # Add evaluation metrics (for EVAL mode)
     eval_metric_ops = {
-        "accuracy": tf.metrics.accuracy(labels=labels, predictions=predictions["classes"])
+       "accuracy": tf.metrics.accuracy(labels=labels, predictions=predictions["classes"])
     }
     return tf.estimator.EstimatorSpec(mode=mode, loss=loss, eval_metric_ops=eval_metric_ops)
 
@@ -109,8 +97,8 @@ def main(unused_arg):
     eval_labels = mnist_dataset["test_label"].astype(np.int32)
 
     mnist_classifier = tf.estimator.Estimator(
-        model_fn=BN_model_fn,
-        model_dir="./BN_model"
+        model_fn=base_model_fn,
+        model_dir="./base_model"
     )
 
     # Set up logging for predictions

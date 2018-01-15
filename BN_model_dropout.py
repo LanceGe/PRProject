@@ -69,7 +69,12 @@ def BN_model_fn(features, labels, mode):
         kernel_size=[1, 1]
     )
 
-    logits = tf.reshape(conv4, [-1, 10])
+    dropout1 = tf.layers.dropout(
+        inputs=conv4,
+        training=(mode == tf.estimator.ModeKeys.TRAIN)
+    )
+
+    logits = tf.reshape(dropout1, [-1, 10])
 
     predictions = {
         "classes": tf.argmax(input=logits, axis=1),
