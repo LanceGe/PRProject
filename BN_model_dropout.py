@@ -115,7 +115,7 @@ def main(unused_arg):
 
     mnist_classifier = tf.estimator.Estimator(
         model_fn=BN_model_fn,
-        model_dir="./BN_model"
+        model_dir="./BN_model_dropout"
     )
 
     # Set up logging for predictions
