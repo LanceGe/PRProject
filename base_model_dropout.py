@@ -3,7 +3,7 @@ import tensorflow as tf
 tf.logging.set_verbosity(tf.logging.INFO)
 
 
-def base_model_fn(features, labels, mode):
+def base_model_dropout_fn(features, labels, mode):
     """ Adapted from
         https://www.tensorflow.org/tutorials/layers#building_the_cnn_mnist_classifier.
     """
@@ -69,7 +69,6 @@ def base_model_fn(features, labels, mode):
 
     # Calculate Loss (for both TRAIN and EVAL modes)
     onehot_labels = tf.one_hot(tf.cast(labels, tf.int32), depth=10)
-    print(onehot_labels.get_shape(), logits.get_shape())
     loss = tf.losses.softmax_cross_entropy(onehot_labels=onehot_labels, logits=logits)
 
     # Configure the Training Op (for TRAIN mode)
@@ -97,7 +96,7 @@ def main(unused_arg):
     eval_labels = mnist_dataset["test_label"].astype(np.int32)
 
     mnist_classifier = tf.estimator.Estimator(
-        model_fn=base_model_fn,
+        model_fn=base_model_dropout_fn,
         model_dir="./base_model_dropout"
     )
 

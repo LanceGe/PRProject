@@ -64,7 +64,6 @@ def base_model_fn(features, labels, mode):
 
     # Calculate Loss (for both TRAIN and EVAL modes)
     onehot_labels = tf.one_hot(tf.cast(labels, tf.int32), depth=10)
-    print(onehot_labels.get_shape(), logits.get_shape())
     loss = tf.losses.softmax_cross_entropy(onehot_labels=onehot_labels, logits=logits)
 
     # Configure the Training Op (for TRAIN mode)

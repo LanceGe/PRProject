@@ -81,15 +81,18 @@ def BN_model_fn(features, labels, mode):
 
     # Calculate Loss (for both TRAIN and EVAL modes)
     onehot_labels = tf.one_hot(tf.cast(labels, tf.int32), depth=10)
-    print(onehot_labels.get_shape(), logits.get_shape())
     loss = tf.losses.softmax_cross_entropy(onehot_labels=onehot_labels, logits=logits)
 
     # Configure the Training Op (for TRAIN mode)
     if mode == tf.estimator.ModeKeys.TRAIN:
         optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.001)
-        train_op = optimizer.minimize(
-            loss=loss,
-            global_step=tf.train.get_global_step())
+        # add moving average to the training set
+        update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS)
+        with tf.control_dependencies(update_ops):
+            train_op = optimizer.minimize(
+                loss=loss,
+                global_step=tf.train.get_global_step()
+            )
         return tf.estimator.EstimatorSpec(mode=mode, loss=loss, train_op=train_op)
 
     # Add evaluation metrics (for EVAL mode)
