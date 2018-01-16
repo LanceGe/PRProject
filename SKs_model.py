@@ -19,6 +19,7 @@ def SKs_model_fn(features, labels, mode):
         inputs=input_layer,
         filters=20 * s,
         kernel_size=[3, 3],
+        kernel_initializer=tf.glorot_uniform_initializer(seed=seed+0),
         activation=None
     )
 
@@ -33,6 +34,7 @@ def SKs_model_fn(features, labels, mode):
         inputs=relu1_1,
         filters=20 * s,
         kernel_size=[3, 3],
+        kernel_initializer=tf.glorot_uniform_initializer(seed=seed+1),
         activation=None
     )
 
@@ -54,6 +56,7 @@ def SKs_model_fn(features, labels, mode):
         inputs=pool1,
         filters=50 * s,
         kernel_size=[5, 5],
+        kernel_initializer=tf.glorot_uniform_initializer(seed=seed+2),
         activation=None
     )
 
@@ -75,6 +78,7 @@ def SKs_model_fn(features, labels, mode):
         inputs=pool2,
         filters=500 * s,
         kernel_size=[4, 4],
+        kernel_initializer=tf.glorot_uniform_initializer(seed=seed+3),
         activation=None
     )
 
@@ -89,7 +93,9 @@ def SKs_model_fn(features, labels, mode):
     conv4 = tf.layers.conv2d(
         inputs=relu3,
         filters=10,
-        kernel_size=[1, 1]
+        kernel_size=[1, 1],
+        kernel_initializer=tf.glorot_uniform_initializer(seed=seed+4),
+        activation=None
     )
 
     logits = tf.reshape(conv4, [-1, 10])
@@ -152,7 +158,8 @@ def main(unused_arg):
         y=train_labels,
         batch_size=100,
         num_epochs=20,
-        shuffle=True
+        shuffle=True,
+        seed=0
     )
 
     mnist_classifier.train(
@@ -172,6 +179,7 @@ def main(unused_arg):
 
 if __name__ == '__main__':
     import sys
+    import numpy as np
     s = float(sys.argv[1])
     train_begin = int(sys.argv[2])
     train_end = int(sys.argv[3])

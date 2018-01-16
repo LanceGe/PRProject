@@ -14,6 +14,7 @@ def BN_model_fn(features, labels, mode):
         inputs=input_layer,
         filters=20,
         kernel_size=[5, 5],
+        kernel_initializer=tf.glorot_uniform_initializer(seed=1),
         activation=None
     )
 
@@ -33,6 +34,7 @@ def BN_model_fn(features, labels, mode):
         inputs=pool1,
         filters=50,
         kernel_size=[5, 5],
+        kernel_initializer=tf.glorot_uniform_initializer(seed=2),
         activation=None
     )
 
@@ -52,6 +54,7 @@ def BN_model_fn(features, labels, mode):
         inputs=pool2,
         filters=500,
         kernel_size=[4, 4],
+        kernel_initializer=tf.glorot_uniform_initializer(seed=3),
         activation=None
     )
 
@@ -66,7 +69,9 @@ def BN_model_fn(features, labels, mode):
     conv4 = tf.layers.conv2d(
         inputs=relu1,
         filters=10,
-        kernel_size=[1, 1]
+        kernel_size=[1, 1],
+        kernel_initializer=tf.glorot_uniform_initializer(seed=4),
+        activation=None
     )
 
     logits = tf.reshape(conv4, [-1, 10])
@@ -129,7 +134,8 @@ def main(unused_arg):
         y=train_labels,
         batch_size=100,
         num_epochs=20,
-        shuffle=True
+        shuffle=True,
+        seed=0
     )
 
     mnist_classifier.train(
