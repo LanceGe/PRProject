@@ -468,7 +468,7 @@ node {
   attr {
     key: "seed"
     value {
-      i: 0
+      i: 87654321
     }
   }
   attr {
@@ -1213,13 +1213,13 @@ node {
   attr {
     key: "seed"
     value {
-      i: 0
+      i: 87654321
     }
   }
   attr {
     key: "seed2"
     value {
-      i: 0
+      i: 1
     }
   }
 }
@@ -3165,13 +3165,13 @@ node {
   attr {
     key: "seed"
     value {
-      i: 0
+      i: 87654321
     }
   }
   attr {
     key: "seed2"
     value {
-      i: 0
+      i: 2
     }
   }
 }
@@ -5117,13 +5117,13 @@ node {
   attr {
     key: "seed"
     value {
-      i: 0
+      i: 87654321
     }
   }
   attr {
     key: "seed2"
     value {
-      i: 0
+      i: 3
     }
   }
 }
@@ -7035,13 +7035,13 @@ node {
   attr {
     key: "seed"
     value {
-      i: 0
+      i: 87654321
     }
   }
   attr {
     key: "seed2"
     value {
-      i: 0
+      i: 4
     }
   }
 }
@@ -19220,7 +19220,7 @@ node {
         dtype: DT_STRING
         tensor_shape {
         }
-        string_val: "_temp_1e4f7f1162b9450cb32fe3b020dc4460/part"
+        string_val: "_temp_cb257c79c17045a3b962245bafed8c79/part"
       }
     }
   }

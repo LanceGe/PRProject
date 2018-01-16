@@ -21,4 +21,4 @@ for seed in i_seed_list:
     os.system("python SKs_model.py 0.2 0 10000 " + str(seed) + " relu")
 
 for activation in ["sigmoid", "relu"]:
-    os.system("python SKs_model.py 0.2 1 10000 0 " + activation)
+    os.system("python SKs_model.py 0.2 0 10000 0 " + activation)
